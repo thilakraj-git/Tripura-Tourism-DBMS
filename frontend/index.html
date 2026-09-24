@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tripura Tourism — Official Travel, Lodges & Heritage Portal</title>
+  <meta name="description" content="Tripura Tourism official digital platform. Explore heritage destinations, book comfortable stays, discover culture, and plan sustainable travel in Tripura.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0;600;0;700;0;800;1;600&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet GIS Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- Core Design System CSS -->
+  <link rel="stylesheet" href="/static/styles/main.css">
+</head>
+<body>
+
+  <!-- Official Government Top Utility Bar (like tourism.tripura.gov.in) -->
+  <div class="gov-topbar">
+    <div class="gov-topbar-inner">
+      <div class="gov-contact-info">
+        <span>✉️ <a href="mailto:tripuratourism09@rediffmail.com">tripuratourism09@rediffmail.com</a></span>
+        <span class="divider">|</span>
+        <span>📞 Helpline: <strong>+91 0381-2325930</strong> (Toll Free: 1800-345-3642)</span>
+        <span class="divider">|</span>
+        <span class="gov-timing">🕒 Mon-Sat: 09:30 AM - 05:30 PM</span>
+      </div>
+      <div class="gov-meta-actions">
+        <div class="gov-lang-select">
+          <span class="lang-btn active" onclick="Toast.show('Language set to English')">English</span>
+          <span class="divider">/</span>
+          <span class="lang-btn" onclick="Toast.show('Language set to Hindi (हिन्दी)')">हिन्दी</span>
+        </div>
+        <div class="gov-currency">
+          <span>Currency: <strong>INR (₹)</strong></span>
+        </div>
+        <div id="auth-actions-container">
+          <button class="btn-topbar" onclick="AppAuth.openLoginModal()">Login / Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Tripura Tourism Navigation Header -->
+  <header class="site-header">
+    <div class="brand-logo" onclick="AppRouter.navigate('home')">
+      <img src="/static/images/ttdcl_logo.png" alt="Tripura Tourism Development Corporation Logo" class="brand-official-logo">
+      <div class="brand-text">
+        <h1 class="brand-title">Tripura Tourism</h1>
+        <span class="brand-tagline">Explore the Unexplored</span>
+      </div>
+    </div>
+
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-link active" data-route="home" onclick="AppRouter.navigate('home')">Home</li>
+        <li class="nav-link" data-route="destinations" onclick="AppRouter.navigate('destinations')">Destinations</li>
+        <li class="nav-link" data-route="accommodations" onclick="AppRouter.navigate('accommodations')">Accommodation (Lodges)</li>
+        <li class="nav-link" data-route="packages" onclick="AppRouter.navigate('packages')">Tour Packages</li>
+        <li class="nav-link" data-route="culture" onclick="AppRouter.navigate('culture')">Culture & Heritage</li>
+        <li class="nav-link" data-route="map" onclick="AppRouter.navigate('map')">Tourist Map</li>
+        <li class="nav-link" data-route="planner" onclick="AppRouter.navigate('planner')">Plan My Trip ✨</li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="btn btn-outline btn-sm" id="btn-user-saved" onclick="AppRouter.navigate('dashboard')">
+        <span>★ Saved</span>
+        <span class="badge badge-pristine" id="saved-badge-count">0</span>
+      </button>
+      <button class="btn btn-primary btn-sm" onclick="AppRouter.navigate('accommodations')">
+        Book Lodge 🏨
+      </button>
+    </div>
+  </header>
+
+  <!-- Dynamic Application Viewport -->
+  <main id="app-viewport">
+    <div style="text-align: center; padding: 100px 0;">
+      <div class="brand-icon" style="margin: 0 auto 20px; width: 50px; height: 50px;">T</div>
+      <h2>Loading Tripura Terra...</h2>
+      <p class="text-muted">Connecting to Database Management System</p>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <div class="mobile-bottom-nav">
+    <div class="mobile-nav-item active" onclick="AppRouter.navigate('home')">
+      <span>🌿</span>
+      <span>Discover</span>
+    </div>
+    <div class="mobile-nav-item" onclick="AppRouter.navigate('destinations')">
+      <span>📍</span>
+      <span>Places</span>
+    </div>
+    <div class="mobile-nav-item" onclick="AppRouter.navigate('map')">
+      <span>🗺️</span>
+      <span>GIS Map</span>
+    </div>
+    <div class="mobile-nav-item" onclick="AppRouter.navigate('planner')">
+      <span>✨</span>
+      <span>Plan</span>
+    </div>
+    <div class="mobile-nav-item" onclick="AppRouter.navigate('dashboard')">
+      <span>👤</span>
+      <span>Dashboard</span>
+    </div>
+  </div>
+
+  <!-- Official Government Footer (matching tripuratourism.gov.in) -->
+  <footer class="gov-site-footer">
+    <div class="gov-footer-grid">
+      <div class="gov-footer-col">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <img src="/static/images/ttdcl_logo.png" alt="TTDCL Logo" style="height: 52px; width: auto; background: white; border-radius: 6px; padding: 4px;">
+          <div>
+            <h3 style="color: #fff; font-size: 1.15rem; margin: 0;">Tripura Tourism</h3>
+            <span style="color: #cbd5e1; font-size: 0.78rem;">Explore the Unexplored</span>
+          </div>
+        </div>
+        <p style="color: #e2e8f0; font-size: 0.85rem; line-height: 1.6;">
+          Dedicated to sustainable eco & cultural tourism, preserving royal heritage, and offering immersive travel experiences across Tripura.
+        </p>
+        <p style="color: #94a3b8; font-size: 0.8rem; margin-top: 12px;">
+          📍 <strong>Corporate Office:</strong> Swetmahal, Palace Compound Road, Agartala, Tripura - 799001
+        </p>
+      </div>
+
+      <div class="gov-footer-col">
+        <h4 style="color: #fbbf24; margin-bottom: 16px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em;">Key Destinations</h4>
+        <ul class="gov-footer-links">
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('destinations', 'dest:ujjayanta-palace-museum')">Ujjayanta Palace & Museum (Agartala)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('destinations', 'dest:neermahal-water-palace')">Neermahal Water Palace (Rudrasagar Lake)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('destinations', 'dest:unakoti-rock-cut-reliefs')">Unakoti Rock-Cut Reliefs (Kailashahar)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('destinations', 'dest:tripura-sundari-temple')">Maa Tripura Sundari Temple (Matabari)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('destinations', 'dest:chabimura-rock-carvings')">Chabimura River Canyon (Amarpur)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('destinations', 'dest:jampui-hills-vanghmun')">Jampui Hills (Vanghmun Village)</a></li>
+        </ul>
+      </div>
+
+      <div class="gov-footer-col">
+        <h4 style="color: #fbbf24; margin-bottom: 16px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em;">TTDCL Tourist Lodges</h4>
+        <ul class="gov-footer-links">
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('accommodations')">Eden Tourist Lodge (Jampui Hills)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('accommodations')">Sagarika Parjatan Niwas (Rudrasagar)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('accommodations')">Geetanjali Tourism Guest House (Agartala)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('accommodations')">Kashba View Tourist Lodge (Kamalasagar)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('accommodations')">Tepania Tourist Log Hut (Udaipur)</a></li>
+          <li><a href="javascript:void(0)" onclick="AppRouter.navigate('accommodations')">Sepahijala Sanctuary Loghut</a></li>
+        </ul>
+      </div>
+
+      <div class="gov-footer-col">
+        <h4 style="color: #fbbf24; margin-bottom: 16px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em;">Help & Facilitation</h4>
+        <p style="color: #e2e8f0; font-size: 0.85rem; line-height: 1.6;">
+          For conducted tour packages, hotel reservations, or permit information:
+        </p>
+        <div style="margin-top: 12px; font-size: 0.85rem; color: #cbd5e1;">
+          <div>📞 <strong>+91 0381-2325930</strong></div>
+          <div>✉️ <strong>tripuratourism09@rediffmail.com</strong></div>
+          <div style="margin-top: 8px;">🕒 09:30 AM – 05:30 PM (IST)</div>
+        </div>
+        <div style="margin-top: 16px;">
+          <button class="btn btn-primary btn-sm" onclick="AppRouter.navigate('accommodations')">Online Lodge Booking</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="gov-footer-bottom">
+      <div>
+        © 2026 Tripura Tourism. All Rights Reserved.
+      </div>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <span>Privacy Policy</span>
+        <span>•</span>
+        <span>Terms & Conditions</span>
+        <span>•</span>
+        <span>Refund & Cancellation Policy</span>
+        <span>•</span>
+        <span>Sitemap</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Container for Auth, Reviews & Admin CRUD -->
+  <div id="modal-container" style="display: none;"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- External Libraries -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Application Modules -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
