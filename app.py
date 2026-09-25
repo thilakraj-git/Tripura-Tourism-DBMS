@@ -2,7 +2,9 @@ import os
 
 import uvicorn
 
-from frontend.backend.app import app
+from frontend.backend.app import app as fastapi_app
+
+app = fastapi_app
 
 
 if __name__ == "__main__":

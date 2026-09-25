@@ -9,11 +9,28 @@ import os
 import time
 from typing import List, Dict, Any, Optional, Tuple
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "tripura_terra.db")
+
+def resolve_db_path() -> str:
+    """Use a writable filesystem on serverless deployment platforms like Vercel."""
+    env_db_path = os.environ.get("DB_PATH")
+    if env_db_path:
+        return env_db_path
+
+    if os.environ.get("VERCEL") or os.environ.get("NOW_REGION"):
+        base_dir = os.environ.get("TMPDIR", "/tmp")
+    else:
+        base_dir = os.path.dirname(__file__)
+
+    os.makedirs(base_dir, exist_ok=True)
+    return os.path.join(base_dir, "tripura_terra.db")
+
+
+DB_PATH = resolve_db_path()
 SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "schema.sql")
 
 def get_connection(db_path: str = DB_PATH) -> sqlite3.Connection:
     """Creates a connection with foreign keys and WAL mode enabled."""
+    os.makedirs(os.path.dirname(db_path) or ".", exist_ok=True)
     conn = sqlite3.connect(db_path, timeout=30.0)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON;")
@@ -23,9 +40,10 @@ def get_connection(db_path: str = DB_PATH) -> sqlite3.Connection:
 
 def init_db(db_path: str = DB_PATH, force: bool = False):
     """Initializes the database schema if tables do not exist or force=True."""
+    os.makedirs(os.path.dirname(db_path) or ".", exist_ok=True)
     if force and os.path.exists(db_path):
         os.remove(db_path)
-        
+
     conn = get_connection(db_path)
     with open(SCHEMA_PATH, "r", encoding="utf-8") as f:
         schema_sql = f.read()
