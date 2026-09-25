@@ -1,4 +1,4 @@
-# Tripura Terra (ত্রিপুরা ভূখণ্ড)
+# Tripura Tourism
 
 ### An Intelligent Digital Platform for Sustainable Eco & Cultural Tourism in Tripura
 
